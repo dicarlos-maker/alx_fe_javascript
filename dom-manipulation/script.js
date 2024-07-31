@@ -10,6 +10,31 @@ function showRandomQuote() {
   document.getElementById('quoteDisplay').innerHTML = `"${quote.text}" - ${quote.category}`;
 }
 
+function createAddQuoteForm() {
+  const formContainer = document.createElement('div');
+  
+  const newQuoteText = document.createElement('input');
+  newQuoteText.id = 'newQuoteText';
+  newQuoteText.type = 'text';
+  newQuoteText.placeholder = 'Enter a new quote';
+
+  const newQuoteCategory = document.createElement('input');
+  newQuoteCategory.id = 'newQuoteCategory';
+  newQuoteCategory.type = 'text';
+  newQuoteCategory.placeholder = 'Enter quote category';
+
+  const addQuoteButton = document.createElement('button');
+  addQuoteButton.id = 'addQuoteButton';
+  addQuoteButton.textContent = 'Add Quote';
+  addQuoteButton.onclick = addQuote;
+
+  formContainer.appendChild(newQuoteText);
+  formContainer.appendChild(newQuoteCategory);
+  formContainer.appendChild(addQuoteButton);
+
+  document.body.appendChild(formContainer);
+}
+
 function addQuote() {
   const newQuoteText = document.getElementById('newQuoteText').value;
   const newQuoteCategory = document.getElementById('newQuoteCategory').value;
@@ -26,4 +51,4 @@ function addQuote() {
 }
 
 document.getElementById('newQuote').addEventListener('click', showRandomQuote);
-document.getElementById('addQuoteButton').addEventListener('click', addQuote);
+document.addEventListener('DOMContentLoaded', createAddQuoteForm);
