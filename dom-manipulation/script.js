@@ -152,6 +152,7 @@ async function fetchQuotesFromServer() {
 async function syncQuotes() {
     const serverQuotes = await fetchQuotesFromServer();
     handleServerQuotes(serverQuotes);
+    console.log("Quotes synced with server!");
 }
 
 function handleServerQuotes(serverQuotes) {
