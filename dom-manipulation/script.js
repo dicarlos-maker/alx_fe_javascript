@@ -136,17 +136,22 @@ function exportToJsonFile() {
     URL.revokeObjectURL(url);
 }
 
-async function syncQuotes() {
+async function fetchQuotesFromServer() {
     try {
         const response = await fetch(API_URL);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        const serverQuotes = await response.json();
-        handleServerQuotes(serverQuotes);
+        return await response.json();
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
+        return [];
     }
+}
+
+async function syncQuotes() {
+    const serverQuotes = await fetchQuotesFromServer();
+    handleServerQuotes(serverQuotes);
 }
 
 function handleServerQuotes(serverQuotes) {
