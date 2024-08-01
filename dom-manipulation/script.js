@@ -136,7 +136,7 @@ function exportToJsonFile() {
     URL.revokeObjectURL(url);
 }
 
-async function fetchQuotesFromServer() {
+async function syncQuotes() {
     try {
         const response = await fetch(API_URL);
         if (!response.ok) {
@@ -190,6 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('quoteDisplay').innerHTML = lastQuote;
     }
     filterQuotes();
-    fetchQuotesFromServer();
-    setInterval(fetchQuotesFromServer, 30000); // Fetch quotes every 30 seconds
+    syncQuotes();
+    setInterval(syncQuotes, 30000); // Sync quotes every 30 seconds
 });
