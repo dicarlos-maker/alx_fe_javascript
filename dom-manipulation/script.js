@@ -78,7 +78,7 @@ function populateCategories() {
     }
 }
 
-function addQuote() {
+async function addQuote() {
     const newQuoteText = document.getElementById('newQuoteText').value;
     const newQuoteCategory = document.getElementById('newQuoteCategory').value;
 
@@ -87,12 +87,31 @@ function addQuote() {
         return;
     }
 
-    quotes.push({ text: newQuoteText, category: newQuoteCategory });
-    saveQuotes();
-    populateCategories();
+    const newQuote = { text: newQuoteText, category: newQuoteCategory };
 
-    document.getElementById('newQuoteText').value = '';
-    document.getElementById('newQuoteCategory').value = '';
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newQuote)
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const savedQuote = await response.json();
+        quotes.push(savedQuote);
+        saveQuotes();
+        populateCategories();
+
+        document.getElementById('newQuoteText').value = '';
+        document.getElementById('newQuoteCategory').value = '';
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
 }
 
 function importFromJsonFile(event) {
@@ -118,9 +137,16 @@ function exportToJsonFile() {
 }
 
 async function fetchQuotesFromServer() {
-    const response = await fetch(API_URL);
-    const serverQuotes = await response.json();
-    handleServerQuotes(serverQuotes);
+    try {
+        const response = await fetch(API_URL);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const serverQuotes = await response.json();
+        handleServerQuotes(serverQuotes);
+    } catch (error) {
+        console.error('There was a problem with the fetch operation:', error);
+    }
 }
 
 function handleServerQuotes(serverQuotes) {
