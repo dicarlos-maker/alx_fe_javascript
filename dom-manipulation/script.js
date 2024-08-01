@@ -4,14 +4,8 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
   { text: "Don't cry because it's over, smile because it happened.", category: "Happiness" }
 ];
 
-let categories = JSON.parse(localStorage.getItem('categories')) || ['Motivation', 'Life', 'Happiness'];
-
 function saveQuotes() {
   localStorage.setItem('quotes', JSON.stringify(quotes));
-}
-
-function saveCategories() {
-  localStorage.setItem('categories', JSON.stringify(categories));
 }
 
 function showRandomQuote() {
@@ -64,7 +58,8 @@ function createAddQuoteForm() {
   document.body.appendChild(formContainer);
 }
 
-function populateCategoryFilter() {
+function populateCategories() {
+  const categories = [...new Set(quotes.map(quote => quote.category))];
   const categoryFilter = document.getElementById('categoryFilter');
   categoryFilter.innerHTML = '<option value="all">All Categories</option>';
   categories.forEach(category => {
@@ -90,12 +85,7 @@ function addQuote() {
 
   quotes.push({ text: newQuoteText, category: newQuoteCategory });
   saveQuotes();
-
-  if (!categories.includes(newQuoteCategory)) {
-      categories.push(newQuoteCategory);
-      saveCategories();
-      populateCategoryFilter();
-  }
+  populateCategories();
 
   document.getElementById('newQuoteText').value = '';
   document.getElementById('newQuoteCategory').value = '';
@@ -108,7 +98,7 @@ function importFromJsonFile(event) {
       quotes.push(...importedQuotes);
       saveQuotes();
       alert('Quotes imported successfully!');
-      populateCategoryFilter();
+      populateCategories();
   };
   fileReader.readAsText(event.target.files[0]);
 }
@@ -127,7 +117,7 @@ document.getElementById('newQuote').addEventListener('click', showRandomQuote);
 document.getElementById('exportQuotes').addEventListener('click', exportToJsonFile);
 document.addEventListener('DOMContentLoaded', () => {
   createAddQuoteForm();
-  populateCategoryFilter();
+  populateCategories();
   const lastQuote = sessionStorage.getItem('lastQuote');
   if (lastQuote) {
       document.getElementById('quoteDisplay').innerHTML = lastQuote;
