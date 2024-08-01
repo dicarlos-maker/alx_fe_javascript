@@ -14,7 +14,7 @@
     <button id="newQuote">Show New Quote</button>
     <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
     <button id="exportQuotes">Export Quotes</button>
+    <div id="conflictNotification" style="display: none; color: red;">Data conflict detected. <button onclick="resolveConflict()">Resolve</button></div>
     <script src="script.js"></script>
 </body>
 </html>
-
